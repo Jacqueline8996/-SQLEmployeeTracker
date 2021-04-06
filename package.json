@@ -1,0 +1,30 @@
+{
+  "name": "teamprofile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jacqueline8996/TeamProfile.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jacqueline8996/TeamProfile/issues"
+  },
+  "homepage": "https://github.com/Jacqueline8996/TeamProfile#readme",
+  "dependencies": {
+    "inquirer": "^7.3.3"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "devDependencies": {
+    "jest": "^26.5.2"
+  }
+}
