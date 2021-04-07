@@ -21,8 +21,8 @@ const TaskTodo = () =>{
         //option of what you want to do 
         {
             type: 'list',
-            message: 'What Do you want to add an Employee?',
-            choices: ["Add Employee","Exit"],
+            message: 'What would you like to do?',
+            choices: ["View all Employees","View All Employee By Department","View All Employees By Mangager","Add Employee","Remove Employee","Update Employee Role","Update Employee Manager","Exit"],
             name: 'optionChoices',
             loop: false
         },
