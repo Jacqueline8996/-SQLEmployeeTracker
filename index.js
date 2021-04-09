@@ -27,6 +27,12 @@ var connection = mysql.createConnection({
   
 function viewAllemployees(){
 
+    var query = "SELECT employee.id, employee.first_name, employee.last_name, employee.role_id,employee.manager_id,role.title, role.salary, department.name";
+
+    //rendering info
+    const allEmployee = await getResults(query);
+    console.log("\n");
+    console.table(allEmployee);
 
 
 };
