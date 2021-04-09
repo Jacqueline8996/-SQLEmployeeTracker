@@ -28,7 +28,8 @@ var connection = mysql.createConnection({
 function viewAllemployees(){
 
     var query = "SELECT employee.id, employee.first_name, employee.last_name, employee.role_id,employee.manager_id,role.title, role.salary, department.name";
-
+    query += "employee INNER JOIN role ON (employee.role_id = role.id AND role.salary ";
+    query += "FROM role INNER JOIN department ON (top_albums.artist = top5000.artist AND top_albums.year ";
     //rendering info
     const allEmployee = await getResults(query);
     console.log("\n");
