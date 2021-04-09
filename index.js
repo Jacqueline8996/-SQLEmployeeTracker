@@ -4,9 +4,12 @@ const mysql = require("mysql");
 const consoleTable = require("console.table");
 const util = require("util");
 
-const jobRank = ['Engineer', 'Intern','Manager']
-let employeeInfo = [];
-let employeesArray = [];
+
+//start the program 
+const startScreen = () =>{
+    console.log("Welcome to the Employee Creator!")
+    console.log("Choose what you want to do with the employee!")
+}
 
 //connection to sql server
 var connection = mysql.createConnection({
@@ -19,21 +22,13 @@ var connection = mysql.createConnection({
   
   connection.connect(function(err) {
     if (err) throw err;
-    runSearch();
+    startMenu();
 });
   
 
-  
-  
-
-//start the program 
-const startScreen = () =>{
-    console.log("Welcome to the Team ProfileGenerator!")
-    console.log("Here you can add teams to a team and profile page!")
-}
 
 //figures out what they want to do 
-const TaskTodo = () =>{
+function startMenu() {
     inquirer.prompt([
         //option of what you want to do 
         {
@@ -46,20 +41,39 @@ const TaskTodo = () =>{
 
     ])
      .then((response) =>{
-         //goes into the second portion
-         
-        if(response.optionChoices[0] === response.optionChoices[0]){
-           
-            // console.log("what did i chooose",response.optionChoices )
-            employeeInfo = goMainQues(response.optionChoices);
-            
-        }
-        else{
-            
-            // console.log("what did i chooose",response.optionChoices )
-            goMainQues(response.optionChoices);
-            
-        }
+        switch (answer.action) {
+            case "View all Employees?":
+              viewAllemployees();
+              break;
+      
+            case "View All Employee By Department":
+              viewAllDepart();
+              break;
+      
+            case "View All Employees By Mangager":
+              viewAllManager();
+              break;
+      
+            case "Add Employee":
+              addAll();
+              break;
+
+            case "Remove Employee":
+                removeEmployee();
+            break;
+            case "Update Employee Role":
+                updateEmployee();
+                break;
+
+            case "Update Employee Manager":
+                updateManager();
+                break; 
+      
+            case "Exit":
+            exitWindow()
+              connection.end();
+              break;
+            }
          
     });
 }
