@@ -25,7 +25,11 @@ var connection = mysql.createConnection({
     startMenu();
 });
   
+function viewAllemployees(){
 
+
+
+};
 
 //figures out what they want to do 
 function startMenu() {
@@ -78,6 +82,7 @@ function startMenu() {
     });
 }
 
+// old code will reuse later
 function exitWindow(){
     displayPage(employeesArray);
     console.log("Thank you Your page has been generated good Bye");
