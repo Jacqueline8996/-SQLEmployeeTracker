@@ -18,10 +18,11 @@ CREATE TABLE employee (
 );
 
 -- table with roles 
-CREATE TABLE role (
+CREATE TABLE Role (
     id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(30) NOT NULL,
     salary decimal NOT NULL,
+    department_id decimal NOT NULL,
     PRIMARY KEY (id)
 );
 
