@@ -25,12 +25,13 @@ var connection = mysql.createConnection({
     startMenu();
 });
   
-function viewAllemployees(){
+const viewAllemployees = async () => {
 
-    var query = "SELECT employee.id, employee.first_name, employee.last_name, employee.role_id,employee.manager_id,role.title, role.salary, department.name";
-    query += "employee INNER JOIN role ON (employee.role_id = role.id AND role.salary ";
-    query += "FROM role INNER JOIN department ON (em.manager_id = department. AND top_albums.year ";
+    var query = "SELECT employee.id, employee.first_name, employee.last_name, employee.role_id,employee.manager_id,Role.title, Role.salary, department.name";
+    // query += "employee INNER JOIN role ON (employee.role_id = role.id AND role.salary ";
+    // query += "FROM role INNER JOIN department ON (em.manager_id = department. AND top_albums.year ";
     //rendering info
+    console.log("my query",query);
     const allEmployee = await getResults(query);
     console.log("\n");
     console.table(allEmployee);
@@ -52,7 +53,7 @@ function startMenu() {
 
     ])
      .then((response) =>{
-        switch (answer.action) {
+        switch (response.action) {
             case "View all Employees?":
               viewAllemployees();
               break;
@@ -66,19 +67,20 @@ function startMenu() {
               break;
       
             case "Add Employee":
+              employeeQueston();
               addAll();
               break;
 
             case "Remove Employee":
-                removeEmployee();
+              removeEmployee();
             break;
             case "Update Employee Role":
-                updateEmployee();
-                break;
+              updateEmployee();
+              break;
 
             case "Update Employee Manager":
-                updateManager();
-                break; 
+              updateManager();
+              break; 
       
             case "Exit":
             exitWindow()
@@ -96,109 +98,64 @@ function exitWindow(){
     return 
 }
 //ask the user in nodes what question,and then put the information into a read me file
-function goMainQues(keepGoing){
+// function goMainQues(keepGoing){
 
-    if(keepGoing === "Exit"){
-        exitWindow();
-        return 
-    }else{
-        employeeQueston(); 
-    }
+//     if(keepGoing === "Exit"){
+//         exitWindow();
+//         return 
+//     }else{
+//         employeeQueston(); 
+//     }
 
-}
+// }
 const employeeQueston = () =>
+
+
     inquirer.prompt([
         //Basic QUesiton for everyone 
         {
-            type: 'list',
-            message: 'What is the employee position',
-            choices: jobRank,
-            name: 'rank',
+            type: 'name',
+            message: 'What is your First Name?',
+            name: 'first',
             loop: false
         },
         {
-            type: 'input',
-            message: 'What is the employee Name?',
-            name: 'employeeName'
+            type: 'name',
+            message: 'What is the Last Name?',
+            name: 'last'
         },
         {
-            type: 'input',
-            message: 'What is the employee ID?',
-            name: 'employeeID'
+            type: 'list',
+            message: 'What is the role?',
+            choices:[],
+            name: 'employeeRole'
         },
         {
-            type: 'input',
-            message: 'What is the Employee email?',
-            name: 'employeeEmail'
-        },
-       // Specific quetsion for Engineer 
-       {
-            type: "input",
-            message: "what is your git hub?",
-            name:"github",
-            when: (response) => response.rank === jobRank[0],
-        },
-        //specific question for intern
-
-        {
-            type: "input",
-            message: "what is your School?",
-            name:"school",
-            when: (response) => response.rank === jobRank[1],
-        },
-        //specific question for manager
-        {
-            type: "input",
-            message: "what is your office number?",
-            name:"officeNumber",
-            when: (response) => response.rank === jobRank[2],
+            type: 'list',
+            message: 'What is your manager num?',
+            choices:[],
+            name: 'EmployeeManag'
         },
 
     ]) .then((response) =>{
-
-        let eName = response.employeeName;
-        let eID = response.employeeID;
-        let eEmail = response.employeeEmail;
-        let eRank = response.rank;
-        switch(response.rank){
-
-        //enginer
-        case(jobRank[0]):
-            let eGit = response.github;
-            employeeInfo = new Engineer(eName, eID, eEmail,eRank, eGit);
-            employeesArray.push(employeeInfo);
-            console.log("Engineer has been added!");
-            break;
-        //adds intern
-        case(jobRank[1]):
-            let eSchool = response.school;
-            employeeInfo = new Intern(eName, eID, eEmail, eRank,eSchool);
-            employeesArray.push(employeeInfo);
-            console.log("Intern has been added!");
-            break;
-        //adds manger
-        case(jobRank[2]):
-            let eOffice = response.officeNumber;
-            employeeInfo = new Manager(eName, eID, eEmail, eRank,eOffice);
-            employeesArray.push(employeeInfo);
-            console.log("Manager has been added!");
-            break;
-    
-        }
-        TaskTodo();
-    }
-   
+        let query =  "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)";
+        getResults(query, [
+          response.first,
+          response.last,
+          response.employeeRole,
+          response.EmployeeManag,
+        ]);
         
-);
-
-
-
+        console.log("\n");
+        startMenu();
+    
+});
+    
 
 
 const main = () =>{
     startScreen();
-    
-    TaskTodo();
+    startMenu();
 }
 
 
