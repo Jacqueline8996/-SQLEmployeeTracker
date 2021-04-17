@@ -58,13 +58,13 @@ function startMenu() {
               viewAllemployees();
               break;
       
-            case "View All Employee By Department":
-              viewAllDepart();
-              break;
+            // case "View All Employee By Department":
+            //   viewAllDepart();
+            //   break;
       
-            case "View All Employees By Mangager":
-              viewAllManager();
-              break;
+            // case "View All Employees By Mangager":
+            //   viewAllManager();
+            //   break;
       
             case "Add Employee":
               employeeQueston();
@@ -73,7 +73,9 @@ function startMenu() {
             case "Add department":
                 addDepartment();
             break;
-
+            case "Add Role":
+                addRole();
+            break;
             case "Remove Employee":
               removeEmployee();
             break;
@@ -83,14 +85,16 @@ function startMenu() {
 
             case "Update Employee Manager":
               updateManager();
-              break; 
+            break; 
+            case "remove employee":
+                removeEmployee();
+            break; 
       
             case "Exit":
             exitWindow()
               connection.end();
               break;
             }
-         
     });
 }
 
@@ -110,7 +114,6 @@ const employeeQueston = () =>
             type: 'name',
             message: 'What is your First Name?',
             name: 'first',
-            loop: false
         },
         {
             type: 'name',
@@ -118,15 +121,13 @@ const employeeQueston = () =>
             name: 'last'
         },
         {
-            type: 'list',
-            message: 'What is the role?',
-            choices:[],
+            type: 'number',
+            message: 'What is the role number?',
             name: 'employeeRole'
         },
         {
-            type: 'list',
+            type: 'number',
             message: 'What is your manager num?',
-            choices:[],
             name: 'EmployeeManag'
         },
 
@@ -146,21 +147,52 @@ const employeeQueston = () =>
 
 const addDepartment = () => {
     inquirer
-      .prompt({
+        .prompt({
         type: "input",
         name: "department",
         message: "What department would you like to add?",
-      })
-      .then((response) => {
+    }).then((response) => {
         let query = "INSERT INTO department (name) VALUES (?)";
         getResults(query, [response.department]);
         console.log(`${response.department} has been added to Departments`);
         console.log("\n");
         mainMenu();
-      });
-  };
+    });
+};
 
-  const removeEmployee = () =>{
+const addRole = () => {
+    inquirer
+      .prompt(
+         //Basic QUesiton for everyone 
+         {
+            type: 'input',
+            message: 'What is the role title?',
+            name: 'roleTitle',
+        },
+        {
+            type: 'number',
+            message: 'What is the Salary?',
+            name: 'salary'
+        },
+        {
+            type: 'number',
+            message: 'What is the Department ID?',
+            name: 'departmentID'
+        },
+      )
+      .then((response) => {
+        var query = "SELECT position,song,artist,year FROM top5000 WHERE position BETWEEN ? AND ?";
+      connection.query(query, [answer.start, answer.end], function(err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+          console.log("my response", response);
+        }
+        mainMenu();
+      });
+    });
+}
+
+const removeEmployee = () =>{
 
     inquirer
     .prompt({
@@ -177,7 +209,7 @@ const addDepartment = () => {
     });
 
 
-  }
+}
 
 
 const main = () =>{
