@@ -70,6 +70,9 @@ function startMenu() {
               employeeQueston();
               addAll();
               break;
+            case "Add department":
+                addDepartment();
+            break;
 
             case "Remove Employee":
               removeEmployee();
@@ -97,17 +100,7 @@ function exitWindow(){
     console.log("Thank you Your page has been generated good Bye");
     return 
 }
-//ask the user in nodes what question,and then put the information into a read me file
-// function goMainQues(keepGoing){
 
-//     if(keepGoing === "Exit"){
-//         exitWindow();
-//         return 
-//     }else{
-//         employeeQueston(); 
-//     }
-
-// }
 const employeeQueston = () =>
 
 
@@ -150,7 +143,41 @@ const employeeQueston = () =>
         startMenu();
     
 });
-    
+
+const addDepartment = () => {
+    inquirer
+      .prompt({
+        type: "input",
+        name: "department",
+        message: "What department would you like to add?",
+      })
+      .then((response) => {
+        let query = "INSERT INTO department (name) VALUES (?)";
+        getResults(query, [response.department]);
+        console.log(`${response.department} has been added to Departments`);
+        console.log("\n");
+        mainMenu();
+      });
+  };
+
+  const removeEmployee = () =>{
+
+    inquirer
+    .prompt({
+      type: "list",
+      name: "terminated",
+      message: "Which employeed do you want to remove",
+    })
+    .then((response) => {
+      let query = "DELETE FROM employee WHERE (?)";
+      getResults(query, [response.terminated]);
+      console.log(`${response.terminated} has been added to Departments`);
+      console.log("\n");
+      mainMenu();
+    });
+
+
+  }
 
 
 const main = () =>{
