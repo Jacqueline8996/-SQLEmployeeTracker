@@ -119,32 +119,6 @@ function searchInfo(value){
       startMenu(); 
     });
   }
-
-  // connection.query(querySet, function(err, res) {
-  //   if(err) {
-  //     console.log(err);
-  //   }
-  //   console.table(res);
-  //   startMenu(); 
-  // });
-
-}
-
-
-function viewAllemployees() {
-    // console.log("inside view all employee")
-    let value = {colNum:"num", colOne:"first_name",colTwo:"last_name",colThree:"role_id",colFour:"manager_id",theTable:"employee"}
-    searchInfo(value)
-
-    // // let query= "SELECT * FROM employee";
-    // connection.query("SELECT id, first_name, last_name, role_id, manager_id FROM employee", function(err, res) {
-    //   if(err) {
-    //     console.log(err);
-    //   }
-    //   console.table(res);
-    //   startMenu(); 
-    // });
-     
 }
 
 function viewAll(option){
@@ -168,7 +142,6 @@ function viewAll(option){
   }
  
 }
-
 
 // old code will reuse later
 function exitWindow(){
