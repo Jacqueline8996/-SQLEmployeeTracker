@@ -1,6 +1,6 @@
 //Importing data and programs from  othere folders
 const inquirer = require("inquirer");
-require("console.table");
+const cTable = require("console.table");
 const mysql = require("mysql");
 
 
@@ -42,6 +42,7 @@ function startMenu() {
           case "View all Employees?":
             viewAllemployees();
             break;
+
           case "View All Employee By Department <---not click":
             viewAllDepart();
             break;
@@ -52,8 +53,8 @@ function startMenu() {
     
           case "Add Employee":
             employeeQueston();
-            addAll();
-            break;
+          break;
+
           case "Add department":
               addDepartment();
           break;
@@ -83,7 +84,7 @@ function startMenu() {
 }
 
 function viewAllemployees() {
-    console.log("inside view all employee")
+    // console.log("inside view all employee")
 
     let query= "SELECT first_name,last_name,role_id,manager_id FROM employee";
       connection.query(query, function(err, res) {
@@ -107,7 +108,6 @@ function exitWindow(){
 }
 
 const employeeQueston = () =>
-
     inquirer.prompt([
         //Basic QUesiton for everyone 
         {
@@ -132,17 +132,14 @@ const employeeQueston = () =>
         },
 
     ]) .then((response) =>{
-        let query =  "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)";
-        getResults(query, [
-          response.first,
-          response.last,
-          response.employeeRole,
-          response.EmployeeManag,
-        ]);
-        
-        console.log("\n");
-        startMenu();
-    
+        let query =  "INSERT INTO employee SET ?";
+        connection.query(query, {first_name: response.first, last_name: response.last, role_id: response.employeeRole, manager_id: response.EmployeeManag}, (err, data) => {
+          if(err) {
+            console.log(err);
+          }
+          console.log(query);
+          startMenu();     
+        });
 });
 
 const addDepartment = () => {
@@ -210,3 +207,4 @@ const removeEmployee = () =>{
 
 
 }
+
