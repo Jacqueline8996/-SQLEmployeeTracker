@@ -107,7 +107,7 @@ function exitWindow(){
     return 
 }
 
-const employeeQueston = () =>
+const employeeQueston = () => 
     inquirer.prompt([
         //Basic QUesiton for everyone 
         {
@@ -142,69 +142,69 @@ const employeeQueston = () =>
         });
 });
 
-const addDepartment = () => {
+const addDepartment = () => 
     inquirer
         .prompt({
         type: "input",
         name: "department",
         message: "What department would you like to add?",
     }).then((response) => {
-        let query = "INSERT INTO department (name) VALUES (?)";
-        getResults(query, [response.department]);
-        console.log(`${response.department} has been added to Departments`);
-        console.log("\n");
-        mainMenu();
-    });
-};
-
-const addRole = () => {
-    inquirer
-      .prompt(
-         //Basic QUesiton for everyone 
-         {
-            type: 'input',
-            message: 'What is the role title?',
-            name: 'roleTitle',
-        },
-        {
-            type: 'number',
-            message: 'What is the Salary?',
-            name: 'salary'
-        },
-        {
-            type: 'number',
-            message: 'What is the Department ID?',
-            name: 'departmentID'
-        },
-      )
-      .then((response) => {
-        var query = "SELECT position,song,artist,year FROM top5000 WHERE position BETWEEN ? AND ?";
-      connection.query(query, [answer.start, answer.end], function(err, res) {
-        if (err) throw err;
-        for (var i = 0; i < res.length; i++) {
-          console.log("my response", response);
+      let query =  "INSERT INTO department SET ?";
+      connection.query(query, {title: response.department}, (err, data) => {
+        if(err) {
+          console.log(err);
         }
-        mainMenu();
+        console.log(query);
+        startMenu();     
       });
-    });
-}
+});
 
-const removeEmployee = () =>{
+const addRole = () => 
+    inquirer.prompt([
+        //Basic QUesiton for everyone 
+        {
+          type: 'input',
+          message: 'What is the role title?',
+          name: 'roleTitle',
+      },
+      {
+          type: 'number',
+          message: 'What is the Salary?',
+          name: 'salary'
+      },
+      {
+          type: 'number',
+          message: 'What is the Department ID?',
+          name: 'departmentID'
+      },
 
-    inquirer
-    .prompt({
-      type: "list",
-      name: "terminated",
-      message: "Which employeed do you want to remove",
-    })
-    .then((response) => {
-      let query = "DELETE FROM employee WHERE (?)";
-      getResults(query, [response.terminated]);
-      console.log(`${response.terminated} has been added to Departments`);
-      console.log("\n");
-      mainMenu();
-    });
+    ]) .then((response) =>{
+        let query =  "INSERT INTO employee SET ?";
+        connection.query(query, {title: response.roleTitle, salary: response.salary, department_id: response.departmentID}, (err, data) => {
+          if(err) {
+            console.log(err);
+          }
+          console.log(query);
+          startMenu();     
+        });
+});
 
 
-}
 
+// const removeEmployee = () =>{
+
+//     inquirer
+//     .prompt({
+//       type: "list",
+//       name: "terminated",
+//       message: "Which employeed do you want to remove",
+//     })
+//     .then((response) => {
+//       let query = "DELETE FROM employee WHERE (?)";
+//       getResults(query, [response.terminated]);
+//       console.log(`${response.terminated} has been added to Departments`);
+//       console.log("\n");
+//       mainMenu();
+//     });
+
+// }
