@@ -31,7 +31,7 @@ function startMenu() {
       {
           type: 'list',
           message: 'What would you like to do?',
-          choices: ["View all Employees","View All Employee By Department","View All Employees By Mangager","Add Employee","Add Department","Add Role","Remove Employee","Update Employee Role","Update Employee Manager","Exit"],
+          choices: ["View all Employees?","View All Employee By Department?","View All Employees By Mangager?","Add Employee","Add Department","Add Role","Remove Employee","Update Employee Role","Update Employee Manager","Exit"],
           name: 'optionChoices',
           loop: false,
       },
@@ -42,10 +42,10 @@ function startMenu() {
           case "View all Employees?":
             viewAllemployees();
             break;
-          case "View All Employee By Department":
+          case "View All Employee By Department?":
             viewAllDepart();
             break;
-          case "View All Employees By Mangager":
+          case "View All Employees By Mangager?":
             viewAllManager();
             break;
           case "Add Employee":
@@ -77,22 +77,20 @@ function startMenu() {
     });
 }
 
+
+
 function viewAllemployees() {
     // console.log("inside view all employee")
 
-    let query= "SELECT * FROM employees_DB.employee";
-      connection.query(query, (err, data) => {
-          if(err) {
-            console.log(err);
-          }
-        console.log(query);
-        startMenu();     
-      });
-      
-      // for (var i = 0; i < res.length; i++) {
-      //   console.log("\n");
-      //   console.table(res[i]);
-      // }
+    // let query= "SELECT * FROM employee";
+    connection.query("SELECT id, first_name, last_name, role_id, manager_id FROM employee", function(err, res) {
+      if(err) {
+        console.log(err);
+      }
+      console.table(res);
+      startMenu(); 
+    });
+     
 }
 
 // old code will reuse later
