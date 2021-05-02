@@ -31,7 +31,7 @@ function startMenu() {
       {
           type: 'list',
           message: 'What would you like to do?',
-          choices: ["View all Employees?","View All Employee By Department?","View All Employees By Mangager?","Add Employee","Add Department","Add Role","Remove Employee","Update Employee Role","Update Employee Manager","Exit"],
+          choices: ["View all Employees?","View All Employee By Department?","View All Role?","View All Employees By Mangager?","Add Employee","Add Department","Add Role","Remove Employee","Update Employee Role","Update Employee Manager","Exit"],
           name: 'optionChoices',
           loop: false,
       },
@@ -40,11 +40,17 @@ function startMenu() {
      .then(function(response){
         switch (response.optionChoices) {
           case "View all Employees?":
-            viewAllemployees();
+            // viewAllemployees();
+            viewAll('employee');
             break;
           case "View All Employee By Department?":
-            viewAllDepart();
-            break;
+            viewAll('department');
+            // viewAllDepart();
+          break;
+          case "View All Role?":
+            viewAll('Role');
+            // viewAllDepart();
+          break;
           case "View All Employees By Mangager?":
             viewAllManager();
             break;
@@ -77,21 +83,92 @@ function startMenu() {
     });
 }
 
+function searchInfo(value){
 
-
-function viewAllemployees() {
-    // console.log("inside view all employee")
-
-    // let query= "SELECT * FROM employee";
-    connection.query("SELECT id, first_name, last_name, role_id, manager_id FROM employee", function(err, res) {
+  let val = value;
+  //department
+  if(val.colNum === 2){
+    let querySet = `SELECT id, ${val.colOne} FROM ${val.theTable}`;
+   connection.query(querySet, function(err, res) {
       if(err) {
         console.log(err);
       }
       console.table(res);
       startMenu(); 
     });
+  }
+  //role
+  else if(val.colNum === 4){
+    let querySet = `SELECT id, ${val.colOne}, ${val.colTwo}, ${val.colThree} FROM ${val.theTable}`;
+    connection.query(querySet, function(err, res) {
+      if(err) {
+        console.log(err);
+      }
+      console.table(res);
+      startMenu(); 
+    });
+  }
+  //employee
+  else if(val.colNum === 5){
+    let querySet = `SELECT id, ${val.colOne}, ${val.colTwo}, ${val.colThree}, ${val.colFour} FROM ${val.theTable}`;
+    connection.query(querySet, function(err, res) {
+      if(err) {
+        console.log(err);
+      }
+      console.table(res);
+      startMenu(); 
+    });
+  }
+
+  // connection.query(querySet, function(err, res) {
+  //   if(err) {
+  //     console.log(err);
+  //   }
+  //   console.table(res);
+  //   startMenu(); 
+  // });
+
+}
+
+
+function viewAllemployees() {
+    // console.log("inside view all employee")
+    let value = {colNum:"num", colOne:"first_name",colTwo:"last_name",colThree:"role_id",colFour:"manager_id",theTable:"employee"}
+    searchInfo(value)
+
+    // // let query= "SELECT * FROM employee";
+    // connection.query("SELECT id, first_name, last_name, role_id, manager_id FROM employee", function(err, res) {
+    //   if(err) {
+    //     console.log(err);
+    //   }
+    //   console.table(res);
+    //   startMenu(); 
+    // });
      
 }
+
+function viewAll(option){
+  // console.log("inside view all employee")
+  // let value = {colNum:"num", colOne:"first_name",colTwo:"last_name",colThree:"role_id",colFour:"manager_id",theTable:"employee"}
+
+   //department
+   if(option === "department"){
+    let value = {colNum:2, colOne:"name",theTable:`${option}`}
+    searchInfo(value) 
+  }
+  //Role
+  else if(option === 'Role'){
+    let value = {colNum:4, colOne:"title",colTwo:"salary",colThree:"department_id",theTable:`${option}`}
+    searchInfo(value) 
+  }
+  //employee
+  else if(option === 'employee'){
+    let value = {colNum:5, colOne:"first_name",colTwo:"last_name",colThree:"role_id",colFour:"manager_id",theTable:`${option}`}
+    searchInfo(value) 
+  }
+ 
+}
+
 
 // old code will reuse later
 function exitWindow(){
