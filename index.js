@@ -70,7 +70,7 @@ function startMenu() {
               removeEmployee();
           break; 
           case "Exit":
-          exitWindow()
+            exitWindow()
             connection.end();
           break;
         }
@@ -80,18 +80,19 @@ function startMenu() {
 function viewAllemployees() {
     // console.log("inside view all employee")
 
-    let query= "SELECT first_name,last_name,role_id,manager_id FROM employee";
-      connection.query(query, function(err, res) {
-
-      if (err) throw err;
-
-      for (var i = 0; i < res.length; i++) {
-        console.log("\n");
-        console.table(res[i]);
-      }
+    let query= "SELECT * FROM employees_DB.employee";
+      connection.query(query, (err, data) => {
+          if(err) {
+            console.log(err);
+          }
+        console.log(query);
+        startMenu();     
+      });
       
-      startMenu();     
-    });
+      // for (var i = 0; i < res.length; i++) {
+      //   console.log("\n");
+      //   console.table(res[i]);
+      // }
 }
 
 // old code will reuse later
@@ -127,7 +128,7 @@ const employeeQueston = () =>
 
         ]).then((response) =>{
         let query =  "INSERT INTO employee SET ?";
-        connection.query(query, {first_name: response.first, last_name: response.last, role_id: response.employeeRole, manager_id: response.EmployeeManag}, (err, data) => {
+        connection.query(query, {name: response.departmentName}, (err, data) => {
           if(err) {
             console.log(err);
           }
