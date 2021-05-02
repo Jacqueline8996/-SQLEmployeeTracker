@@ -1,43 +1,28 @@
 //Importing data and programs from  othere folders
 const inquirer = require("inquirer");
+require("console.table");
 const mysql = require("mysql");
-const consoleTable = require("console.table");
-const util = require("util");
 
+
+var connection = mysql.createConnection({
+    host: "localhost",
+    port: 3306,
+    user: "root",
+    password: "Blue rose",
+    database: "employees_DB",
+});
+
+connection.connect(function(err) {
+  if (err) throw err;
+  startScreen();
+  startMenu();
+});
 
 //start the program 
 const startScreen = () =>{
     console.log("Welcome to the Employee Creator!")
     console.log("Choose what you want to do with the employee!")
 }
-
-//connection to sql server
-var connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "Blue rose",
-    database: "employees_DB"
-  });
-  
-  connection.connect(function(err) {
-    if (err) throw err;
-    startMenu();
-});
-  
-const viewAllemployees = async () => {
-
-    var query = "SELECT employee.id, employee.first_name, employee.last_name, employee.role_id,employee.manager_id,Role.title, Role.salary, department.name";
-    // query += "employee INNER JOIN role ON (employee.role_id = role.id AND role.salary ";
-    // query += "FROM role INNER JOIN department ON (em.manager_id = department. AND top_albums.year ";
-    //rendering info
-    console.log("my query",query);
-    const allEmployee = await getResults(query);
-    console.log("\n");
-    console.table(allEmployee);
-
-
-};
 
 //figures out what they want to do 
 function startMenu() {
@@ -58,13 +43,13 @@ function startMenu() {
               viewAllemployees();
               break;
       
-            // case "View All Employee By Department":
-            //   viewAllDepart();
-            //   break;
+            case "View All Employee By Department <---not click":
+              viewAllDepart();
+              break;
       
-            // case "View All Employees By Mangager":
-            //   viewAllManager();
-            //   break;
+            case "View All Employees By Mangager <---not click":
+              viewAllManager();
+              break;
       
             case "Add Employee":
               employeeQueston();
@@ -98,6 +83,33 @@ function startMenu() {
     });
 }
 
+const viewAllemployees = async () => {
+    console.log("inside view all employee")
+
+    let query= "SELECT first_name,last_name,role_id,manager_id FROM employee ";
+      connection.query(query, function(err, res) {
+
+      if (err) throw err;
+
+      for (var i = 0; i < res.length; i++) {
+        console.table(res[i]);
+      }
+        startMenu();     
+    })
+    
+    // query += "employee INNER JOIN role ON (employee.role_id = role.id AND role.salary ";
+    // query += "FROM role INNER JOIN department ON (em.manager_id = department. AND top_albums.year ";
+    //rendering info
+ 
+    // console.log("my query",query);
+    // // const allEmployee = await getResults(query);
+    // console.log("\n");
+    // console.table(allEmployee);
+    startMenu()
+
+
+}
+
 // old code will reuse later
 function exitWindow(){
     displayPage(employeesArray);
@@ -106,7 +118,6 @@ function exitWindow(){
 }
 
 const employeeQueston = () =>
-
 
     inquirer.prompt([
         //Basic QUesiton for everyone 
@@ -210,12 +221,3 @@ const removeEmployee = () =>{
 
 
 }
-
-
-const main = () =>{
-    startScreen();
-    startMenu();
-}
-
-
-main();
