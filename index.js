@@ -40,16 +40,13 @@ function startMenu() {
      .then(function(response){
         switch (response.optionChoices) {
           case "View all Employees?":
-            // viewAllemployees();
             viewAll('employee');
             break;
           case "View All Employee By Department?":
             viewAll('department');
-            // viewAllDepart();
           break;
           case "View All Role?":
             viewAll('Role');
-            // viewAllDepart();
           break;
           case "View All Employees By Mangager?":
             viewAllManager();
@@ -83,42 +80,36 @@ function startMenu() {
     });
 }
 
-function searchInfo(value){
+function searchInfo(value, choice){
+
 
   let val = value;
+  let data =[]
+  let querySet ="";
+  let choices = choice;
+
   //department
   if(val.colNum === 2){
-    let querySet = `SELECT id, ${val.colOne} FROM ${val.theTable}`;
-   connection.query(querySet, function(err, res) {
-      if(err) {
-        console.log(err);
-      }
-      console.table(res);
-      startMenu(); 
-    });
+   querySet += `SELECT id, ${val.colOne} FROM ${val.theTable}`;
   }
   //role
   else if(val.colNum === 4){
-    let querySet = `SELECT id, ${val.colOne}, ${val.colTwo}, ${val.colThree} FROM ${val.theTable}`;
-    connection.query(querySet, function(err, res) {
-      if(err) {
-        console.log(err);
-      }
-      console.table(res);
-      startMenu(); 
-    });
+   querySet += `SELECT id, ${val.colOne}, ${val.colTwo}, ${val.colThree} FROM ${val.theTable}`;
+    
   }
   //employee
   else if(val.colNum === 5){
-    let querySet = `SELECT id, ${val.colOne}, ${val.colTwo}, ${val.colThree}, ${val.colFour} FROM ${val.theTable}`;
-    connection.query(querySet, function(err, res) {
-      if(err) {
-        console.log(err);
-      }
-      console.table(res);
-      startMenu(); 
-    });
+    querySet += `SELECT id, ${val.colOne}, ${val.colTwo}, ${val.colThree}, ${val.colFour} FROM ${val.theTable}`;
   }
+  
+  connection.query(querySet, function(err, res) {
+    if(err) {
+      console.log(err);
+    }
+    console.table(res);
+    data.push(res);
+    startMenu(); 
+  });
 }
 
 function viewAll(option){
