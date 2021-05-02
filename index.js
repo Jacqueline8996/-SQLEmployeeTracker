@@ -31,7 +31,7 @@ function startMenu() {
       {
           type: 'list',
           message: 'What would you like to do?',
-          choices: ["View all Employees","View All Employee By Department","View All Employees By Mangager","Add Employee","Remove Employee","Update Employee Role","Update Employee Manager","Exit"],
+          choices: ["View all Employees","View All Employee By Department","View All Employees By Mangager","Add Employee","Add Department","Add Role","Remove Employee","Update Employee Role","Update Employee Manager","Exit"],
           name: 'optionChoices',
           loop: false,
       },
@@ -42,39 +42,33 @@ function startMenu() {
           case "View all Employees?":
             viewAllemployees();
             break;
-
-          case "View All Employee By Department <---not click":
+          case "View All Employee By Department":
             viewAllDepart();
             break;
-    
-          case "View All Employees By Mangager <---not click":
+          case "View All Employees By Mangager":
             viewAllManager();
             break;
-    
           case "Add Employee":
             employeeQueston();
           break;
-
-          case "Add department":
-              addDepartment();
+          case "Add Department":
+            addDepartment();
           break;
           case "Add Role":
-              addRole();
+            addRole();
           break;
           case "Remove Employee":
             removeEmployee();
           break;
           case "Update Employee Role":
             updateEmployee();
-            break;
-
+          break;
           case "Update Employee Manager":
             updateManager();
           break; 
           case "remove employee":
               removeEmployee();
           break; 
-    
           case "Exit":
           exitWindow()
             connection.end();
@@ -111,27 +105,27 @@ const employeeQueston = () =>
     inquirer.prompt([
         //Basic QUesiton for everyone 
         {
-            type: 'name',
-            message: 'What is your First Name?',
-            name: 'first',
+          type: 'name',
+          message: 'What is your First Name?',
+          name: 'first',
         },
         {
-            type: 'name',
-            message: 'What is the Last Name?',
-            name: 'last'
+          type: 'name',
+          message: 'What is the Last Name?',
+          name: 'last'
         },
         {
-            type: 'number',
-            message: 'What is the role number?',
-            name: 'employeeRole'
+          type: 'number',
+          message: 'What is the role number?',
+          name: 'employeeRole'
         },
         {
-            type: 'number',
-            message: 'What is your manager num?',
-            name: 'EmployeeManag'
+          type: 'number',
+          message: 'What is your manager num?',
+          name: 'EmployeeManag'
         },
 
-    ]) .then((response) =>{
+        ]).then((response) =>{
         let query =  "INSERT INTO employee SET ?";
         connection.query(query, {first_name: response.first, last_name: response.last, role_id: response.employeeRole, manager_id: response.EmployeeManag}, (err, data) => {
           if(err) {
@@ -143,14 +137,15 @@ const employeeQueston = () =>
 });
 
 const addDepartment = () => 
-    inquirer
-        .prompt({
-        type: "input",
-        name: "department",
-        message: "What department would you like to add?",
-    }).then((response) => {
+    inquirer.prompt([
+      {
+      type: 'input',
+      message: 'What department would you like to add?',
+      name: 'departmentName',
+    },
+  ]).then((response) =>{
       let query =  "INSERT INTO department SET ?";
-      connection.query(query, {title: response.department}, (err, data) => {
+      connection.query(query, {name: response.departmentName}, (err, data) => {
         if(err) {
           console.log(err);
         }
@@ -179,7 +174,7 @@ const addRole = () =>
       },
 
     ]) .then((response) =>{
-        let query =  "INSERT INTO employee SET ?";
+        let query =  "INSERT INTO Role SET ?";
         connection.query(query, {title: response.roleTitle, salary: response.salary, department_id: response.departmentID}, (err, data) => {
           if(err) {
             console.log(err);
