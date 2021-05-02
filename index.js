@@ -27,87 +27,76 @@ const startScreen = () =>{
 //figures out what they want to do 
 function startMenu() {
     inquirer.prompt([
-        //option of what you want to do 
-        {
-            type: 'list',
-            message: 'What would you like to do?',
-            choices: ["View all Employees","View All Employee By Department","View All Employees By Mangager","Add Employee","Remove Employee","Update Employee Role","Update Employee Manager","Exit"],
-            name: 'optionChoices',
-            loop: false
-        },
+      //option of what you want to do 
+      {
+          type: 'list',
+          message: 'What would you like to do?',
+          choices: ["View all Employees","View All Employee By Department","View All Employees By Mangager","Add Employee","Remove Employee","Update Employee Role","Update Employee Manager","Exit"],
+          name: 'optionChoices',
+          loop: false,
+      },
 
     ])
-     .then((response) =>{
-        switch (response.action) {
-            case "View all Employees?":
-              viewAllemployees();
-              break;
-      
-            case "View All Employee By Department <---not click":
-              viewAllDepart();
-              break;
-      
-            case "View All Employees By Mangager <---not click":
-              viewAllManager();
-              break;
-      
-            case "Add Employee":
-              employeeQueston();
-              addAll();
-              break;
-            case "Add department":
-                addDepartment();
+     .then(function(response){
+        switch (response.optionChoices) {
+          case "View all Employees?":
+            viewAllemployees();
             break;
-            case "Add Role":
-                addRole();
+          case "View All Employee By Department <---not click":
+            viewAllDepart();
             break;
-            case "Remove Employee":
-              removeEmployee();
+    
+          case "View All Employees By Mangager <---not click":
+            viewAllManager();
             break;
-            case "Update Employee Role":
-              updateEmployee();
-              break;
+    
+          case "Add Employee":
+            employeeQueston();
+            addAll();
+            break;
+          case "Add department":
+              addDepartment();
+          break;
+          case "Add Role":
+              addRole();
+          break;
+          case "Remove Employee":
+            removeEmployee();
+          break;
+          case "Update Employee Role":
+            updateEmployee();
+            break;
 
-            case "Update Employee Manager":
-              updateManager();
-            break; 
-            case "remove employee":
-                removeEmployee();
-            break; 
-      
-            case "Exit":
-            exitWindow()
-              connection.end();
-              break;
-            }
+          case "Update Employee Manager":
+            updateManager();
+          break; 
+          case "remove employee":
+              removeEmployee();
+          break; 
+    
+          case "Exit":
+          exitWindow()
+            connection.end();
+          break;
+        }
     });
 }
 
-const viewAllemployees = async () => {
+function viewAllemployees() {
     console.log("inside view all employee")
 
-    let query= "SELECT first_name,last_name,role_id,manager_id FROM employee ";
+    let query= "SELECT first_name,last_name,role_id,manager_id FROM employee";
       connection.query(query, function(err, res) {
 
       if (err) throw err;
 
       for (var i = 0; i < res.length; i++) {
+        console.log("\n");
         console.table(res[i]);
       }
-        startMenu();     
-    })
-    
-    // query += "employee INNER JOIN role ON (employee.role_id = role.id AND role.salary ";
-    // query += "FROM role INNER JOIN department ON (em.manager_id = department. AND top_albums.year ";
-    //rendering info
- 
-    // console.log("my query",query);
-    // // const allEmployee = await getResults(query);
-    // console.log("\n");
-    // console.table(allEmployee);
-    startMenu()
-
-
+      
+      startMenu();     
+    });
 }
 
 // old code will reuse later
