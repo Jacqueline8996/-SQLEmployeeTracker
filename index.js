@@ -31,7 +31,7 @@ function startMenu() {
       {
           type: 'list',
           message: 'What would you like to do?',
-          choices: ["View all Employees?","View All Department?","View All Role?","Add Employee","Add Department","Add Role","Remove Employee","Remove Department","Remove Role","Update Employee","Update Department","Update Roles","Exit"],
+          choices: ["View all Employees?","View All Department?","View All Role?","Add Employee","Add Department","Add Role","Remove Employee","Remove Department","Remove Role","Update Employee","Update Department","Update Roles","ViewTwoTables","Exit"],
           name: 'optionChoices',
           loop: false,
       },
@@ -78,6 +78,9 @@ function startMenu() {
           case "Remove Role":
             remove('Roles');
           break; 
+          case "ViewTwoTables":
+            joinTable();
+          break; 
           case "Exit":
             exitWindow()
             connection.end();
@@ -85,7 +88,7 @@ function startMenu() {
         }
     });
 }
-
+//pass in the function in order to update a table
 function update(tableType,list){
   inquirer.prompt([
      {
@@ -118,6 +121,7 @@ function update(tableType,list){
       });
 }
 
+//pass in the function in order to remove from a table
 function remove(tableType){
   inquirer.prompt([
      {
@@ -138,7 +142,7 @@ function remove(tableType){
       });
 }
 
-
+//pass in the function in order to display from a table
 function searchInfo(value){
   let val = value;
   let data =[]
@@ -169,8 +173,6 @@ function searchInfo(value){
 }
 
 function viewAll(option){
-  // console.log("inside view all employee")
-  // let value = {colNum:"num", colOne:"first_name",colTwo:"last_name",colThree:"role_id",colFour:"manager_id",theTable:"employee"}
 
    //department
    if(option === "department"){
@@ -188,13 +190,6 @@ function viewAll(option){
     searchInfo(value) 
   }
  
-}
-
-// old code will reuse later
-function exitWindow(){
-    displayPage(employeesArray);
-    console.log("Thank you Your page has been generated good Bye");
-    return 
 }
 
 const employeeQueston = () => 
@@ -280,22 +275,57 @@ const addRole = () =>
         });
 });
 
+//pass in the function in order to display from a table
+function joinConnection(tableOne,tableTwo){
+
+  let querySet ="";
+ 
+   //user chose to join table to it self 
+  if(tableOne === tableTwo){
+    viewAll(tableOne)
+  }
+  //role
+  else if((tableOne === 'employee' && tableTwo === 'Role')||(tableOne === 'Role' && tableTwo === 'employee')){
+   querySet += `SELECT *  FROM employee INNER JOIN Role ON employee.role_id = Role.id`;
+  }
+  //employee
+  else if((tableOne === 'employee' && tableTwo === 'department')||(tableOne === 'department' && tableTwo === 'employee')){
+    querySet += `SELECT *  FROM employee INNER JOIN Role ON employee.role_id = Role.id INNER JOIN department ON role.department_id = department.id`;
+  }
+  else if((tableOne === 'department' && tableTwo === 'Role')||(tableOne === 'Role' && tableTwo === 'department')){
+    querySet += `SELECT *  FROM Role INNER JOIN department ON role.department_id = department.id`;
+  }
+  
+  connection.query(querySet, function(err, res) {
+    if(err) {
+      console.log(err);
+    }
+    console.table(res);
+    startMenu(); 
+  });
+}
 
 
-// const removeEmployee = () =>{
+const joinTable = () => 
+inquirer.prompt([
+  {
+     type: "list",
+     name: "tableOne",
+     choices: ["employee","department","Role"],
+     message: `Which Is the first tables would you like to Join ?`
+   },
+   {
+    type: "list",
+    name: "tableTwo",
+    choices: ["employee","department","Role"],
+    message: `Which is the Second tables would you like to Join ?`
+  },
+ ]).then(response => {
+     joinConnection(response.tableOne,response.tableTwo)
+});
 
-//     inquirer
-//     .prompt({
-//       type: "list",
-//       name: "terminated",
-//       message: "Which employeed do you want to remove",
-//     })
-//     .then((response) => {
-//       let query = "DELETE FROM employee WHERE (?)";
-//       getResults(query, [response.terminated]);
-//       console.log(`${response.terminated} has been added to Departments`);
-//       console.log("\n");
-//       mainMenu();
-//     });
-
-// }
+// exit window 
+function exitWindow(){
+  console.log("Thank you Your page has been generated good Bye");
+  return 
+}
