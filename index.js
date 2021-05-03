@@ -31,7 +31,7 @@ function startMenu() {
       {
           type: 'list',
           message: 'What would you like to do?',
-          choices: ["View all Employees?","View All Employee By Department?","View All Role?","View All Employees By Mangager?","Add Employee","Add Department","Add Role","Remove Employee","Remove Department","Remove Role","Update Employee","Update Department","Update Roles","Exit"],
+          choices: ["View all Employees?","View All Department?","View All Role?","Add Employee","Add Department","Add Role","Remove Employee","Remove Department","Remove Role","Update Employee","Update Department","Update Roles","Exit"],
           name: 'optionChoices',
           loop: false,
       },
@@ -42,15 +42,12 @@ function startMenu() {
           case "View all Employees?":
             viewAll('employee');
             break;
-          case "View All Employee By Department?":
+          case "View All Department?":
             viewAll('department');
           break;
           case "View All Role?":
             viewAll('Role');
           break;
-          case "View All Employees By Mangager?":
-            viewAllManager();
-            break;
           case "Add Employee":
             employeeQueston();
           break;
@@ -78,7 +75,7 @@ function startMenu() {
           case "Remove Department":
             remove('department');
           break; 
-          case "Remove Roles":
+          case "Remove Role":
             remove('Roles');
           break; 
           case "Exit":
@@ -128,8 +125,8 @@ function remove(tableType){
         name: "id",
         message: `Which ${tableType} would you like to update? (Enter ${tableType} ID)`
       },
-    ]).then(response => {const query = `DELETE FROM ${tableType} = ? WHERE id = ?`;
-      connection.query(query, [ response.id], (err, data) => {
+    ]).then(response => {const query = `DELETE FROM ${tableType} WHERE id = ?`;
+      connection.query(query, [response.id], (err, data) => {
         if(err) {
             console.log(err);
         }
