@@ -31,7 +31,7 @@ function startMenu() {
       {
           type: 'list',
           message: 'What would you like to do?',
-          choices: ["View all Employees?","View All Department?","View All Role?","Add Employee","Add Department","Add Role","Remove Employee","Remove Department","Remove Role","Update Employee","Update Department","Update Roles","ViewTwoTables","Exit"],
+          choices: ["View all Employees?","View All Department?","View All Role?","Add Employee","Add Department","Add Role","Update Employee","Update Department","Update Roles","Remove Employee","Remove Department","Remove Role","ViewTwoTables","Exit"],
           name: 'optionChoices',
           loop: false,
       },
@@ -57,9 +57,6 @@ function startMenu() {
           case "Add Role":
             addRole();
           break;
-          case "Remove Employee":
-            removeEmployee();
-          break;
           case "Update Employee":
             update('employee',["first_name","last_name","role_id","manager_id"]);
           break;
@@ -69,14 +66,14 @@ function startMenu() {
           case "Update Roles":
             update('Role',["title","salary","department_id","manager_id"]);
           break; 
-          case "Remove employee":
+          case "Remove Employee":
             remove('employee');
           break; 
           case "Remove Department":
             remove('department');
           break; 
           case "Remove Role":
-            remove('Roles');
+            remove('Role');
           break; 
           case "ViewTwoTables":
             joinTable();
@@ -127,7 +124,7 @@ function remove(tableType){
      {
         type: "input",
         name: "id",
-        message: `Which ${tableType} would you like to update? (Enter ${tableType} ID)`
+        message: `Which ${tableType} item would you like to Remove (Enter ${tableType} ID)`
       },
     ]).then(response => {const query = `DELETE FROM ${tableType} WHERE id = ?`;
       connection.query(query, [response.id], (err, data) => {
