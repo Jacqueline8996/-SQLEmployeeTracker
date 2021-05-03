@@ -287,22 +287,35 @@ function joinConnection(tableOne,tableTwo){
   //role
   else if((tableOne === 'employee' && tableTwo === 'Role')||(tableOne === 'Role' && tableTwo === 'employee')){
    querySet += `SELECT *  FROM employee INNER JOIN Role ON employee.role_id = Role.id`;
-  }
-  //employee
-  else if((tableOne === 'employee' && tableTwo === 'department')||(tableOne === 'department' && tableTwo === 'employee')){
-    querySet += `SELECT *  FROM employee INNER JOIN Role ON employee.role_id = Role.id INNER JOIN department ON role.department_id = department.id`;
-  }
-  else if((tableOne === 'department' && tableTwo === 'Role')||(tableOne === 'Role' && tableTwo === 'department')){
-    querySet += `SELECT *  FROM Role INNER JOIN department ON role.department_id = department.id`;
-  }
-  
-  connection.query(querySet, function(err, res) {
+   connection.query(querySet, function(err, res) {
     if(err) {
       console.log(err);
     }
     console.table(res);
     startMenu(); 
   });
+  }
+  //employee
+  else if((tableOne === 'employee' && tableTwo === 'department')||(tableOne === 'department' && tableTwo === 'employee')){
+    querySet += `SELECT *  FROM employee INNER JOIN Role ON employee.role_id = Role.id INNER JOIN department ON role.department_id = department.id`;
+    connection.query(querySet, function(err, res) {
+      if(err) {
+        console.log(err);
+      }
+      console.table(res);
+      startMenu(); 
+    });
+  }
+  else if((tableOne === 'department' && tableTwo === 'Role')||(tableOne === 'Role' && tableTwo === 'department')){
+    querySet += `SELECT *  FROM Role INNER JOIN department ON role.department_id = department.id`;
+    connection.query(querySet, function(err, res) {
+      if(err) {
+        console.log(err);
+      }
+      console.table(res);
+      startMenu(); 
+    });
+  }
 }
 
 
@@ -326,6 +339,6 @@ inquirer.prompt([
 
 // exit window 
 function exitWindow(){
-  console.log("Thank you Your page has been generated good Bye");
+  console.log("Thank you! Good Bye");
   return 
 }
