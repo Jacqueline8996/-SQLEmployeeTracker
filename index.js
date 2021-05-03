@@ -31,7 +31,7 @@ function startMenu() {
       {
           type: 'list',
           message: 'What would you like to do?',
-          choices: ["View all Employees?","View All Employee By Department?","View All Role?","View All Employees By Mangager?","Add Employee","Add Department","Add Role","Remove Employee","Update Employee Role","Update Employee Manager","Exit"],
+          choices: ["View all Employees?","View All Employee By Department?","View All Role?","View All Employees By Mangager?","Add Employee","Add Department","Add Role","Remove Employee","Update Employee","Update Department","Update Roles","Exit"],
           name: 'optionChoices',
           loop: false,
       },
@@ -63,11 +63,14 @@ function startMenu() {
           case "Remove Employee":
             removeEmployee();
           break;
-          case "Update Employee Role":
-            updateEmployee();
+          case "Update Employee":
+            update('employee',["first_name","last_name","role_id","manager_id"]);
           break;
-          case "Update Employee Manager":
-            updateManager();
+          case "Update Department":
+            update('department',["name"]);
+          break; 
+          case "Update Roles":
+            update('Role',["title","salary","department_id","manager_id"]);
           break; 
           case "remove employee":
               removeEmployee();
@@ -79,14 +82,43 @@ function startMenu() {
         }
     });
 }
+function update(tableType,list){
+  inquirer.prompt([
+     {
+        type: "input",
+        name: "id",
+        message: `Which ${tableType} would you like to update? (Enter ${tableType} ID)`
+      },
+      {
+        type: "list",
+        name: "option",
+        choices: list,
+        message: `Please choice which value of the ${tableType} table you would like to update`
+      },
+      {
+        type: "input",
+        name: "newVal",
+        message: "What is the new Value?"
+      },
+    
+    ]).then(response => {const query = `UPDATE ${tableType} SET ${response.option} = ? WHERE id = ?`;
+      connection.query(query, [response.newVal, response.id], (err, data) => {
+        if(err) {
+            console.log(err);
+        }
+        console.log(query);
+        viewAll(tableType);
+      })
+      }).catch(err => {
+      console.log(err);
+      });
+}
 
-function searchInfo(value, choice){
 
-
+function searchInfo(value){
   let val = value;
   let data =[]
   let querySet ="";
-  let choices = choice;
 
   //department
   if(val.colNum === 2){
