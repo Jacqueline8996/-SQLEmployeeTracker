@@ -20,7 +20,7 @@ connection.connect(function(err) {
 
 //start the program 
 const startScreen = () =>{
-    console.log("Welcome to the Employee Creator!")
+    console.log("Welcome to the SQL Employee Tracker!")
     console.log("Choose what you want to do with the employee!")
 }
 
@@ -212,13 +212,13 @@ const employeeQueston = () =>
         },
         {
           type: 'number',
-          message: 'What is your manager num?',
+          message: 'What is your manager EmployeeID num?',
           name: 'EmployeeManag'
         },
 
         ]).then((response) =>{
         let query =  "INSERT INTO employee SET ?";
-        connection.query(query, {name: response.departmentName}, (err, data) => {
+        connection.query(query, {first_name:response.first,last_name:response.last,role_id:response.employeeRole,manager_id:response.EmployeeManag}, (err, data) => {
           if(err) {
             console.log(err);
           }
@@ -236,7 +236,7 @@ const addDepartment = () =>
     },
   ]).then((response) =>{
       let query =  "INSERT INTO department SET ?";
-      connection.query(query, {name: response.departmentName}, (err, data) => {
+      connection.query(query, {name:response.departmentName}, (err, data) => {
         if(err) {
           console.log(err);
         }
