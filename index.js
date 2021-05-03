@@ -31,7 +31,7 @@ function startMenu() {
       {
           type: 'list',
           message: 'What would you like to do?',
-          choices: ["View all Employees?","View All Employee By Department?","View All Role?","View All Employees By Mangager?","Add Employee","Add Department","Add Role","Remove Employee","Update Employee","Update Department","Update Roles","Exit"],
+          choices: ["View all Employees?","View All Employee By Department?","View All Role?","View All Employees By Mangager?","Add Employee","Add Department","Add Role","Remove Employee","Remove Department","Remove Role","Update Employee","Update Department","Update Roles","Exit"],
           name: 'optionChoices',
           loop: false,
       },
@@ -72,8 +72,14 @@ function startMenu() {
           case "Update Roles":
             update('Role',["title","salary","department_id","manager_id"]);
           break; 
-          case "remove employee":
-              removeEmployee();
+          case "Remove employee":
+            remove('employee');
+          break; 
+          case "Remove Department":
+            remove('department');
+          break; 
+          case "Remove Roles":
+            remove('Roles');
           break; 
           case "Exit":
             exitWindow()
@@ -82,6 +88,7 @@ function startMenu() {
         }
     });
 }
+
 function update(tableType,list){
   inquirer.prompt([
      {
@@ -103,6 +110,26 @@ function update(tableType,list){
     
     ]).then(response => {const query = `UPDATE ${tableType} SET ${response.option} = ? WHERE id = ?`;
       connection.query(query, [response.newVal, response.id], (err, data) => {
+        if(err) {
+            console.log(err);
+        }
+        console.log(query);
+        viewAll(tableType);
+      })
+      }).catch(err => {
+      console.log(err);
+      });
+}
+
+function remove(tableType){
+  inquirer.prompt([
+     {
+        type: "input",
+        name: "id",
+        message: `Which ${tableType} would you like to update? (Enter ${tableType} ID)`
+      },
+    ]).then(response => {const query = `DELETE FROM ${tableType} = ? WHERE id = ?`;
+      connection.query(query, [ response.id], (err, data) => {
         if(err) {
             console.log(err);
         }
