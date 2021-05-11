@@ -20,6 +20,7 @@
 # ProjectUsage
 * To create a HTML page base on User input.
 ![alt text](/images/viewAll.png)
+* Link to the demo : https://drive.google.com/file/d/1nyN6b_0koTNv_kkIEkJwwhbYbse0zFvo/view?usp=sharing
 
 # Project Contributors
 * No contributors
